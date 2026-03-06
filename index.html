@@ -9,18 +9,18 @@
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
         .grid { display: flex; justify-content: center; gap: 6px; margin: 20px 0; flex-wrap: wrap; }
         .cell { width: 40px; height: 45px; border: 2px solid #ccc; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; text-transform: uppercase; }
+        .cell:disabled { background: #eee; }
         .btn { background: #f39c12; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .skip-btn { background: #e74c3c; }
-        #msg { margin-top: 15px; font-weight: bold; height: 20px; }
-        #scoreDisplay { font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
+        #msg { margin-top: 15px; font-weight: bold; height: 25px; }
     </style>
 </head>
 <body>
 
 <div class="card">
     <h2 style="color: #f39c12;">WORD KING 👑</h2>
-    <div id="scoreDisplay">SCORE: 0</div>
-    <div id="hintSi" style="font-weight: bold; margin: 20px 0; min-height: 40px;">Loading...</div>
+    <div id="scoreDisplay" style="font-weight:bold;">SCORE: 0</div>
+    <div id="hintSi" style="font-weight: bold; margin: 20px 0; min-height: 40px;"></div>
     <div id="wordGrid" class="grid"></div>
     <button class="btn" onclick="checkAnswer()">CHECK ANSWER</button>
     <button class="btn skip-btn" onclick="skipWord()">SKIP (-5 Points)</button>
@@ -29,60 +29,34 @@
 
 <script>
     const localWords = [
-        {w: "WATER", h: "ජීවත් වීමට අවශ්‍ය බොන දෙය"}, {w: "APPLE", h: "රතු පාට රසවත් පලතුරක්"},
-        {w: "SCHOOL", h: "ඉගෙන ගන්නා ස්ථානය"}, {w: "MOTHER", h: "ආදරණීයම කාන්තාව"},
-        {w: "TREE", h: "අතු පතර විහිදුණු ශාකය"}, {w: "KING", h: "රටක නායකයා"},
-        {w: "BIRD", h: "අහසේ පියාඹන සතා"}, {w: "MILK", h: "පෝෂ්‍යදායී සුදු පානය"},
-        {w: "EARTH", h: "අප ජීවත් වන ග්‍රහලෝකය"}, {w: "HOUSE", h: "අප පදිංචි නිවස"},
-        {w: "CLOCK", h: "වෙලාව බැලීමට ගන්නා උපකරණය"}, {w: "SHIRT", h: "ඇඟට අඳින ඇඳුමක්"},
-        {w: "SPOON", h: "කෑම කන්න ගන්නා හැන්ද"}, {w: "ORANGE", h: "තැඹිලි පාට පලතුරක්"},
-        {w: "PENCIL", h: "අකුරු ලිවීමට ගන්නා උපකරණය"}, {w: "DOCTOR", h: "ලෙඩුන්ට බෙහෙත් දෙන කෙනා"},
-        {w: "BICYCLE", h: "රෝද දෙකේ වාහනය"}, {w: "COFFEE", h: "උදෑසන බොන තිත්ත බීමක්"},
-        {w: "TABLE", h: "වාඩි වී වැඩ කරන මේසය"}, {w: "PHONE", h: "දුරකථනය"},
-        {w: "LIGHT", h: "ආලෝකය"}, {w: "DANCE", h: "නැටුම"},
-        {w: "MUSIC", h: "සංගීතය"}, {w: "SLEEP", h: "නින්ද"},
-        {w: "FRUIT", h: "පලතුරු"}, {w: "BREAD", h: "පාන්"},
-        {w: "TEACH", h: "ඉගැන්වීම"}, {w: "LEARN", h: "ඉගෙනීම"},
-        {w: "FRIEND", h: "මිතුරා"}, {w: "FAMILY", h: "පවුල"},
-        {w: "NIGHT", h: "රාත්‍රිය"}, {w: "MONTH", h: "මාසය"},
-        {w: "YEARS", h: "වසරක්"}, {w: "FLOWER", h: "මලක්"},
-        {w: "RIVER", h: "ගංගාව"}, {w: "TRAIN", h: "දුම්රිය"},
-        {w: "GARDEN", h: "වත්ත"}, {w: "WINDOW", h: "ජනේලය"},
-        {w: "KITCHEN", h: "මුළුතැන්ගෙය"}, {w: "BRIDGE", h: "පාලම"},
-        {w: "HAMMER", h: "මිටිය"}, {w: "BEACH", h: "මුහුදු වෙරළ"},
-        {w: "MOUNTAIN", h: "කන්ද"}, {w: "DOG", h: "බල්ලා"},
-        {w: "CAT", h: "පුසී"}, {w: "BOOK", h: "පොත"},
-        {w: "PEN", h: "පෑන"}, {w: "CHAIR", h: "පුටුව"},
-        {w: "DOOR", h: "දොර"}, {w: "CLOUD", h: "වලාකුළ"},
-        {w: "SUGAR", h: "පැණි රස දෙන සුදු දේ"}, {w: "BREAD", h: "පාන්"},
-        {w: "WHITE", h: "කිරි වැනි පාටක්"}, {w: "BLACK", h: "අඳුරු පාටක්"},
-        {w: "GREEN", h: "කොළ පාට"}, {w: "BLUE", h: "නිල් පාට"},
-        {w: "STARS", h: "රෑට අහසේ දිලිසෙන දේ"}, {w: "MOON", h: "සඳ"},
-        {w: "WIND", h: "සුළඟ"}, {w: "FIRE", h: "ගින්දර"},
-        {w: "RAIN", h: "වැස්ස"}, {w: "SNOW", h: "හිම"},
-        {w: "COLD", h: "සීතල"}, {w: "HOT", h: "උණුසුම්"},
-        {w: "FAST", h: "ඉක්මන්"}, {w: "SLOW", h: "මන්දගාමී"},
-        {w: "HAPPY", h: "සතුටු"}, {w: "SAD", h: "දුක"},
-        {w: "TALL", h: "උස"}, {w: "SHORT", h: "කොට"},
-        {w: "BIG", h: "ලොකු"}, {w: "SMALL", h: "පුංචි"},
-        {w: "CLEAN", h: "පිරිසිදු"}, {w: "DIRTY", h: "අපිරිසිදු"},
-        {w: "RICH", h: "පොහොසත්"}, {w: "POOR", h: "දුප්පත්"},
-        {w: "EASY", h: "ලේසි"}, {w: "HARD", h: "අමාරු"},
-        {w: "OPEN", h: "විවෘත"}, {w: "CLOSE", h: "වසා ඇති"},
-        {w: "YOUNG", h: "තරුණ"}, {w: "OLD", h: "පරණ"},
-        {w: "NEW", h: "අලුත්"}, {w: "STRONG", h: "ශක්තිමත්"},
-        {w: "WEAK", h: "දුර්වල"}, {w: "SILENT", h: "නිශ්ශබ්ද"},
-        {w: "LOUD", h: "ශබ්ද වැඩි"}, {w: "DEEP", h: "ගැඹුරු"},
-        {w: "WIDE", h: "පුළුල්"}, {w: "THICK", h: "ඝනකම"},
-        {w: "THIN", h: "සිහින්"}, {w: "SWEET", h: "පැණි රස"},
-        {w: "SOUR", h: "ඇඹුල්"}, {w: "BITTER", h: "තිත්ත"},
-        {w: "SALTY", h: "ලුණු රස"}, {w: "SOFT", h: "මෘදු"},
-        {w: "HARD", h: "තද"}, {w: "DRY", h: "වියළි"},
-        {w: "WET", h: "තෙත"}, {w: "SHARP", h: "තියුණු"}
+        {w: "WATER", h: "ජීවත් වීමට අවශ්‍ය බොන දෙය"}, {w: "APPLE", h: "රතු පාට රසවත් පලතුරක්"}, {w: "SCHOOL", h: "ඉගෙන ගන්නා ස්ථානය"}, {w: "MOTHER", h: "ආදරණීයම කාන්තාව"},
+        {w: "TREE", h: "අතු පතර විහිදුණු ශාකය"}, {w: "KING", h: "රටක නායකයා"}, {w: "BIRD", h: "අහසේ පියාඹන සතා"}, {w: "MILK", h: "පෝෂ්‍යදායී සුදු පානය"},
+        {w: "EARTH", h: "අප ජීවත් වන ග්‍රහලෝකය"}, {w: "HOUSE", h: "අප පදිංචි නිවස"}, {w: "CLOCK", h: "වෙලාව බැලීමට ගන්නා උපකරණය"}, {w: "SHIRT", h: "ඇඟට අඳින ඇඳුමක්"},
+        {w: "SPOON", h: "කෑම කන්න ගන්නා හැන්ද"}, {w: "ORANGE", h: "තැඹිලි පාට පලතුරක්"}, {w: "PENCIL", h: "අකුරු ලිවීමට ගන්නා උපකරණය"}, {w: "DOCTOR", h: "ලෙඩුන්ට බෙහෙත් දෙන කෙනා"},
+        {w: "BICYCLE", h: "රෝද දෙකේ වාහනය"}, {w: "COFFEE", h: "උදෑසන බොන තිත්ත බීමක්"}, {w: "TABLE", h: "වාඩි වී වැඩ කරන මේසය"}, {w: "PHONE", h: "දුරකථනය"},
+        {w: "LIGHT", h: "ආලෝකය"}, {w: "DANCE", h: "නැටුම"}, {w: "MUSIC", h: "සංගීතය"}, {w: "SLEEP", h: "නින්ද"},
+        {w: "FRUIT", h: "පලතුරු"}, {w: "BREAD", h: "පාන්"}, {w: "TEACH", h: "ඉගැන්වීම"}, {w: "LEARN", h: "ඉගෙනීම"},
+        {w: "FRIEND", h: "මිතුරා"}, {w: "FAMILY", h: "පවුල"}, {w: "NIGHT", h: "රාත්‍රිය"}, {w: "MONTH", h: "මාසය"},
+        {w: "YEARS", h: "වසරක්"}, {w: "FLOWER", h: "මලක්"}, {w: "RIVER", h: "ගංගාව"}, {w: "TRAIN", h: "දුම්රිය"},
+        {w: "GARDEN", h: "වත්ත"}, {w: "WINDOW", h: "ජනේලය"}, {w: "KITCHEN", h: "මුළුතැන්ගෙය"}, {w: "BRIDGE", h: "පාලම"},
+        {w: "HAMMER", h: "මිටිය"}, {w: "BEACH", h: "මුහුදු වෙරළ"}, {w: "MOUNTAIN", h: "කන්ද"}, {w: "DOG", h: "බල්ලා"},
+        {w: "CAT", h: "පුසී"}, {w: "BOOK", h: "පොත"}, {w: "PEN", h: "පෑන"}, {w: "CHAIR", h: "පුටුව"},
+        {w: "DOOR", h: "දොර"}, {w: "CLOUD", h: "වලාකුළ"}, {w: "SUGAR", h: "පැණි රස දෙන සුදු දේ"}, {w: "WHITE", h: "කිරි වැනි පාටක්"},
+        {w: "BLACK", h: "අඳුරු පාටක්"}, {w: "GREEN", h: "කොළ පාට"}, {w: "BLUE", h: "නිල් පාට"}, {w: "STARS", h: "රෑට අහසේ දිලිසෙන දේ"},
+        {w: "MOON", h: "සඳ"}, {w: "WIND", h: "සුළඟ"}, {w: "FIRE", h: "ගින්දර"}, {w: "RAIN", h: "වැස්ස"},
+        {w: "SNOW", h: "හිම"}, {w: "COLD", h: "සීතල"}, {w: "HOT", h: "උණුසුම්"}, {w: "FAST", h: "ඉක්මන්"},
+        {w: "SLOW", h: "මන්දගාමී"}, {w: "HAPPY", h: "සතුටු"}, {w: "SAD", h: "දුක"}, {w: "TALL", h: "උස"},
+        {w: "SHORT", h: "කොට"}, {w: "BIG", h: "ලොකු"}, {w: "SMALL", h: "පුංචි"}, {w: "CLEAN", h: "පිරිසිදු"},
+        {w: "DIRTY", h: "අපිරිසිදු"}, {w: "RICH", h: "පොහොසත්"}, {w: "POOR", h: "දුප්පත්"}, {w: "EASY", h: "ලේසි"},
+        {w: "HARD", h: "අමාරු"}, {w: "OPEN", h: "විවෘත"}, {w: "CLOSE", h: "වසා ඇති"}, {w: "YOUNG", h: "තරුණ"},
+        {w: "OLD", h: "පරණ"}, {w: "NEW", h: "අලුත්"}, {w: "STRONG", h: "ශක්තිමත්"}, {w: "WEAK", h: "දුර්වල"},
+        {w: "SILENT", h: "නිශ්ශබ්ද"}, {w: "LOUD", h: "ශබ්ද වැඩි"}, {w: "DEEP", h: "ගැඹුරු"}, {w: "WIDE", h: "පුළුල්"},
+        {w: "THICK", h: "ඝනකම"}, {w: "THIN", h: "සිහින්"}, {w: "SWEET", h: "පැණි රස"}, {w: "SOUR", h: "ඇඹුල්"},
+        {w: "BITTER", h: "තිත්ත"}, {w: "SALTY", h: "ලුණු රස"}, {w: "SOFT", h: "මෘදු"}, {w: "DRY", h: "වියළි"},
+        {w: "WET", h: "තෙත"}, {w: "SHARP", h: "තියුණු"}, {w: "LEMON", h: "දෙහි"}, {w: "GRAPE", h: "මිදි"}
     ];
 
-    let currentIdx = 0;
-    let score = 0;
+    let currentIdx = 0; let score = 0;
 
     function loadWord() {
         let data = localWords[currentIdx % localWords.length];
@@ -93,6 +67,8 @@
         for (let i = 0; i < word.length; i++) {
             let input = document.createElement('input');
             input.className = 'cell'; input.maxLength = 1; input.id = 'c' + i;
+            if(i === 0 || i === word.length - 1) { input.value = word[i]; input.disabled = true; }
+            else { input.oninput = function() { if(this.value.length === 1) { let next = document.getElementById('c' + (i + 1)); if(next) next.focus(); } }; }
             grid.appendChild(input);
         }
         document.getElementById('scoreDisplay').innerText = "SCORE: " + score;
@@ -102,24 +78,11 @@
         let word = localWords[currentIdx % localWords.length].w.toUpperCase();
         let guess = "";
         for (let i = 0; i < word.length; i++) guess += document.getElementById('c' + i).value.toUpperCase();
-
-        if(guess === word) { 
-            score += 10;
-            document.getElementById('msg').innerText = "✅ නිවැරදියි! (+10)";
-            document.getElementById('msg').style.color = "green";
-            currentIdx++; 
-            setTimeout(loadWord, 1000); 
-        } else { document.getElementById('msg').innerText = "❌ වැරදියි!"; }
+        if(guess === word) { score += 10; document.getElementById('msg').innerText = "✅ නිවැරදියි! (+10)"; document.getElementById('msg').style.color = "green"; currentIdx++; setTimeout(loadWord, 1000); }
+        else { document.getElementById('msg').innerText = "❌ වැරදියි!"; document.getElementById('msg').style.color = "red"; }
     }
 
-    function skipWord() {
-        score -= 5;
-        currentIdx++;
-        document.getElementById('msg').innerText = "⏭️ මගහැරියා (-5)";
-        document.getElementById('msg').style.color = "#e67e22";
-        setTimeout(loadWord, 1000);
-    }
-
+    function skipWord() { score -= 5; currentIdx++; document.getElementById('msg').innerText = "⏭️ මගහැරියා (-5)"; document.getElementById('msg').style.color = "#e67e22"; setTimeout(loadWord, 1000); }
     loadWord();
 </script>
 </body>
