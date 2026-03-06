@@ -2,50 +2,57 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Word King 👑 | Thilina Kumara</title>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#f39c12">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #f39c12; --bg: #f0f2f5; --dark: #2c3e50; }
-        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; }
-        .card { background: white; padding: 30px; border-radius: 25px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; max-width: 420px; text-align: center; border-top: 10px solid var(--primary); }
-        .user-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; font-weight: bold; background: #fff4e6; padding: 10px; border-radius: 12px; }
-        .hint-box { background: #fdfaf6; padding: 20px; border-radius: 15px; text-align: left; margin: 20px 0; border-left: 6px solid var(--primary); min-height: 90px; }
-        .hint-si { font-size: 18px; color: var(--dark); font-weight: bold; line-height: 1.6; letter-spacing: 0px; }
-        .grid { display: flex; justify-content: center; gap: 8px; margin: 25px 0; flex-wrap: wrap; }
-        .cell { width: 45px; height: 50px; border: 2.5px solid #ddd; border-radius: 10px; text-align: center; font-size: 22px; font-weight: bold; text-transform: uppercase; outline: none; }
-        .cell:focus { border-color: var(--primary); background: #fffdfa; }
-        .cell:disabled { background: #f1f2f6; color: #7f8c8d; }
-        .btn { background: var(--primary); color: white; border: none; padding: 16px; border-radius: 15px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; box-shadow: 0 4px #d35400; transition: 0.2s; }
-        .btn:active { transform: translateY(2px); box-shadow: none; }
-        .watermark { margin-top: 25px; font-size: 12px; color: #bdc3c7; font-weight: bold; letter-spacing: 1px; }
-        #msg { height: 25px; margin-top: 15px; font-weight: bold; }
+        :root { --primary: #f39c12; --bg: #f8f9fa; --dark: #2c3e50; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; overflow: hidden; }
+        .card { background: white; padding: 25px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-bottom: 8px solid var(--primary); }
+        .user-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; font-weight: bold; background: #fff4e6; padding: 12px; border-radius: 15px; color: #d35400; }
+        .hint-box { background: #fdfaf6; padding: 20px; border-radius: 20px; text-align: left; margin: 15px 0; border: 1px solid #ffeaa7; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
+        .hint-si { font-size: 17px; color: var(--dark); font-weight: bold; line-height: 1.5; text-align: center; }
+        .grid { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
+        .cell { width: 48px; height: 55px; border: 2px solid #e0e0e0; border-radius: 12px; text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; outline: none; background: #fff; transition: 0.2s; }
+        .cell:focus { border-color: var(--primary); background: #fffdf0; transform: scale(1.05); }
+        .cell:disabled { background: #f1f2f6; color: #95a5a6; border-color: #eee; }
+        .btn { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 18px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; box-shadow: 0 5px #d35400; transition: 0.1s; }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px #d35400; }
+        #msg { height: 25px; margin-top: 15px; font-weight: bold; font-size: 14px; }
+        .watermark { margin-top: 25px; font-size: 11px; color: #bdc3c7; font-weight: bold; letter-spacing: 1px; }
         .hidden { display: none; }
     </style>
 </head>
 <body>
 
 <div id="loginScreen" class="card">
-    <h1 style="color: var(--primary);">WORD KING 👑</h1>
-    <p style="font-size: 14px; color: #7f8c8d;">Thilina Kumara ඉදිරිපත් කරන<br>ඉංග්‍රීසි වචන ක්‍රීඩාව</p>
-    <input type="text" id="playerNameInput" style="width:85%; padding:15px; margin:20px 0; border:2px solid #eee; border-radius:12px; text-align:center; font-size:16px;" placeholder="ඔබේ නම ඇතුළත් කරන්න">
+    <div style="font-size: 50px;">👑</div>
+    <h1 style="color: var(--primary); margin: 10px 0;">WORD KING</h1>
+    <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">By Thilina Kumara</p>
+    <input type="text" id="playerNameInput" style="width:100%; padding:15px; margin-bottom:20px; border:2px solid #eee; border-radius:15px; text-align:center; font-size:16px;" placeholder="ඔබේ නම ඇතුළත් කරන්න">
     <button class="btn" onclick="startGame()">ක්‍රීඩාව අරඹන්න</button>
 </div>
 
 <div id="gameScreen" class="card hidden">
     <div class="user-info">
         <span>👤 <span id="displayName"></span></span>
-        <span style="color:var(--primary);">🏆 SCORE: <span id="displayScore">0</span></span>
+        <span>🏆 SCORE: <span id="displayScore">0</span></span>
     </div>
     <div class="hint-box">
-        <span style="font-size:10px; color:var(--primary); font-weight:800; text-transform:uppercase;">සිංහල ඉඟිය (HINT)</span>
-        <div class="hint-si" id="hintSi">පූරණය වෙමින්...</div>
+        <div class="hint-si" id="hintSi">සූදානම් වන්න...</div>
     </div>
     <div class="grid" id="wordGrid"></div>
-    <button class="btn" onclick="checkAnswer()">CHECK ANSWER</button>
+    <button class="btn" onclick="checkAnswer()">පරීක්ෂා කරන්න</button>
     <div id="msg"></div>
-    <div class="watermark">BY L THILINA KUMARA</div>
+    <div class="watermark">DESIGNED BY L THILINA KUMARA</div>
 </div>
+
+<audio id="winSnd" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+<audio id="failSnd" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
 
 <script>
     const masterBank = [
@@ -53,116 +60,70 @@
         {w: "WATER", h: "ජීවත් වීමට අත්‍යවශ්‍ය බොන දෙය"},
         {w: "SCHOOL", h: "අකුරු ඉගෙන ගැනීමට යන ස්ථානය"},
         {w: "MOTHER", h: "ලොවට බිහි කළ ආදරණීයම කාන්තාව"},
-        {w: "TREE", h: "සාකයක් හදුන්වන නම"},
-        {w: "BOOK", h: "කියවීමට සහ දැනුම ලබා ගැනීමට ගන්නා දෙය"},
-        {w: "SING", h: "ගීතයක් ගායනා කරනවාට කියන වචනය"},
-        {w: "DOG", h: "නිවස ආරක්ෂා කරන විශ්වාසවන්තම සත්වයා"},
-        {w: "SUN", h: "දිවා කාලයේ ලොවට ආලෝකය දෙන තරුව"},
-        {w: "BIRD", h: "පිහාටු ඇති අහසේ පියාඹන සත්වයා"},
-        {w: "DOCTOR", h: "රෝගීන්ට ප්‍රතිකාර කරන පුද්ගලයා"},
-        {w: "RIVER", h: "ගලා යන විශාල ජල කඳක්"},
-        {w: "FATHER", h: "පවුලක ප්‍රධානියා ලෙස සැලකෙන පියා"},
-        {w: "CHAIR", h: "වාඩි වීමට ගන්නා ගෘහ භාණ්ඩය"},
-        {w: "BREAD", h: "පාන් පිටි වලින් සාදන ප්‍රධාන ආහාරයක්"},
-        {w: "FLOWER", h: "මිහිරි සුවඳක් දෙන ශාකයක ලස්සනම කොටස"},
-        {w: "SNAKE", h: "බිම බඩගා යන සර්පයා"},
-        {w: "KING", h: "රාජ්‍යයක් පාලනය කරන ප්‍රධානියා"},
-        {w: "MOON", h: "රාත්‍රී කාලයේ අහසේ පෙනෙන වස්තුව"},
-        {w: "BOTTLE", h: "වතුර පුරවන භාජනය"},
-        {w: "ORANGE", h: "තැඹිලි පැහැති පලතුරක් හෝ වර්ණයක්"},
-        {w: "GARDEN", h: "මල් සහ ගස් වවා ඇති ලස්සන භූමිය"},
-        {w: "WINDOW", h: "නිවසකට වාතය සහ ආලෝකය එන සිදුර"},
-        {w: "KITCHEN", h: "ආහාර පිසීමට ගන්නා කාමරය"},
-        {w: "TRAIN", h: "පීලි මත දුවන දිගු වාහනය"},
+        {w: "TREE", h: "සාකයක් හදුන් වන නම"},
         {w: "SMILE", h: "සතුටු වූ විට මුහුණේ ඇතිවන ඉරියව්ව"},
+        {w: "HOUSE", h: "අප ජීවත් වන නිවස"},
+        {w: "RIVER", h: "ගලා යන විශාල ජල කඳක්"},
+        {w: "BIRD", h: "අහසේ පියාසර කරන සත්වයෙක්"},
+        {w: "TRAIN", h: "පීලි මත දුවන දිගු වාහනය"},
+        {w: "FATHER", h: "පවුලක ප්‍රධානියා ලෙස සැලකෙන පියා"},
+        {w: "GARDEN", h: "මල් සහ ගස් වවා ඇති ලස්සන භූමිය"},
+        {w: "SUN", h: "දවල් කාලයේ ලොවට ආලෝකය දෙන තරුව"},
+        {w: "KING", h: "රටක් පාලනය කරන ප්‍රධානියා"},
+        {w: "MILK", h: "එළදෙනගෙන් ලබාගන්නා සුදු පානය"},
         {w: "EARTH", h: "අප ජීවත් වන ග්‍රහලෝකය"},
-        {w: "SHIRT", h: "ඇඟට අඳින ඇඳුමක්"},
-        {w: "PIZZA", h: "වටකුරු විදේශීය රසවත් ආහාරයක්"},
-        {w: "COMPUTER", h: "වැඩ පහසු කරන විද්‍යුත් යන්ත්‍රය"},
-        {w: "SPOON", h: "කෑම කන්න ගන්නා හැන්ද"},
-        {w: "HONEY", h: "මී මැස්සන් හදන පැණි"},
-        {w: "CLOCK", h: "වෙලාව බැලීමට ගන්නා උපකරණය"},
-        {w: "PARROT", h: "අකුරු කතා කළ හැකි ලස්සන පක්ෂියෙක්"},
-        {w: "MOUNTAIN", h: "ඉතා උස විශාල ගල් සහ පස් කන්ද"},
-        {w: "UMBRELLA", h: "වැස්සෙන් බේරීමට හිසට ඉහළින් අල්ලන දෙය"},
-        {w: "FARMER", h: "ගොවිතැන් කරන පුද්ගලයා"},
-        {w: "GRASS", h: "පොළොවේ වැවෙන කොළ පැහැති තණකොළ"},
-        {w: "CANDLE", h: "ආලෝකය ලබා දෙන ඉටි කූර"},
-        {w: "SHOE", h: "කකුලට දමන පාවහන් යුගලක්"},
-        {w: "MILK", h: "එළදෙනගෙන් ලබාගන්නා සුදු පැහැති පෝෂ්‍යදායී පානය"},
-        {w: "HOUSE", h: "අප පදිංචි වී සිටින නිවස"},
-        {w: "PAPER", h: "පොත් සෑදීමට සහ ලිවීමට ගන්නා දෙය"},
-        {w: "TIGER", h: "කැලේ සිටින ඉරි සහිත බළල් පවුලේ සත්වයා"},
-        {w: "BANANA", h: "කහ පැහැති දිගටි පලතුරක්"},
-        {w: "BRIDGE", h: "ගඟක් හරහා එගොඩ වීමට තැනූ මග"},
-        {w: "HAMMER", h: "ඇණ ගැසීමට ගන්නා බර මෙවලම"},
-        {w: "MONKEY", h: "ගස් උඩ පනින වලිගයක් සහිත සතෙක්"},
-        {w: "LION", h: "කැලේ රජා ලෙස හඳුන්වන සත්වයා"},
-        {w: "COFFEE", h: "උදෑසන පානය කරන තිත්ත රසැති බීමක්"}
+        {w: "FLOWER", h: "මිහිරි සුවඳක් දෙන ශාකයක කොටසක්"}
     ];
 
     let currentIdx = 0;
-    let currentWord = "";
     let score = 0;
+    let currentWord = "";
+
+    // ඇප් එක Load වන විට කලින් තිබූ තොරතුරු ලබා ගැනීම
+    window.onload = () => {
+        const savedName = localStorage.getItem('wk_name');
+        const savedIdx = localStorage.getItem('wk_idx');
+        const savedScore = localStorage.getItem('wk_score');
+
+        if(savedName && savedIdx !== null) {
+            currentIdx = parseInt(savedIdx);
+            score = parseInt(savedScore) || 0;
+            document.getElementById('playerNameInput').value = savedName;
+            startGame(); // කෙලින්ම Game එකට යන්න
+        }
+    }
 
     function startGame() {
         const name = document.getElementById('playerNameInput').value;
-        if(!name) return alert("කරුණාකර නම ඇතුළත් කරන්න!");
-        localStorage.setItem('wordKing_Name', name);
+        if(!name) return alert("නම ඇතුළත් කරන්න!");
+        
+        localStorage.setItem('wk_name', name);
         document.getElementById('displayName').innerText = name;
         document.getElementById('loginScreen').classList.add('hidden');
         document.getElementById('gameScreen').classList.remove('hidden');
         loadWord();
     }
 
-    async function loadWord() {
+    function loadWord() {
         document.getElementById('msg').innerText = "";
         document.getElementById('wordGrid').innerHTML = "";
         
-        if (currentIdx < masterBank.length) {
-            let data = masterBank[currentIdx];
-            currentWord = data.w.toUpperCase();
-            document.getElementById('hintSi').innerText = data.h;
-            setupGrid(currentWord);
-        } else {
-            fetchFromAPI();
-        }
+        let data = masterBank[currentIdx % masterBank.length];
+        currentWord = data.w.toUpperCase();
+        document.getElementById('hintSi').innerText = data.h;
         document.getElementById('displayScore').innerText = score;
-    }
 
-    async function fetchFromAPI() {
-        document.getElementById('hintSi').innerText = "අලුත් වචනයක් සොයමින්...";
-        let len = score < 100 ? 4 : 5;
-        try {
-            const res = await fetch(`https://random-word-api.herokuapp.com/word?length=${len}`);
-            const wordArr = await res.json();
-            const word = wordArr[0].toUpperCase();
+        // Level එක සහ Score එක ස්ථිරවම Save කිරීම
+        localStorage.setItem('wk_idx', currentIdx);
+        localStorage.setItem('wk_score', score);
 
-            const dictRes = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`);
-            const dictData = await dictRes.json();
-            if (dictData.title === "No Definitions Found") return fetchFromAPI();
-
-            let enHint = dictData[0].meanings[0].definitions[0].definition;
-            const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(enHint)}&langpair=en|si`);
-            const transData = await transRes.json();
-            
-            currentWord = word;
-            document.getElementById('hintSi').innerText = transData.responseData.translatedText.split(/[;,]/)[0];
-            setupGrid(word);
-        } catch (e) {
-            setTimeout(fetchFromAPI, 2000);
-        }
-    }
-
-    function setupGrid(word) {
-        const grid = document.getElementById('wordGrid');
-        for (let i = 0; i < word.length; i++) {
+        for (let i = 0; i < currentWord.length; i++) {
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'cell';
             input.maxLength = 1;
             input.id = 'c' + i;
-            if (i === 0 || i === word.length - 1) { input.value = word[i]; input.disabled = true; }
+            if (i === 0 || i === currentWord.length - 1) { input.value = currentWord[i]; input.disabled = true; }
             input.oninput = function() {
                 if (this.value) {
                     let next = document.getElementById('c' + (i + 1));
@@ -170,7 +131,7 @@
                     if (next) next.focus();
                 }
             };
-            grid.appendChild(input);
+            document.getElementById('wordGrid').appendChild(input);
         }
     }
 
@@ -180,20 +141,18 @@
 
         const msgDiv = document.getElementById('msg');
         if (guess === currentWord) {
-            msgDiv.innerText = "✅ නිවැරදියි! ඊළඟ එකට සූදානම් වන්න...";
-            msgDiv.style.color = "green";
-            score++;
+            try { document.getElementById('winSnd').play(); } catch(e){}
+            msgDiv.innerText = "✅ නිවැරදියි!";
+            msgDiv.style.color = "#27ae60";
+            score += 10;
             currentIdx++;
             setTimeout(loadWord, 1500);
         } else {
+            try { document.getElementById('failSnd').play(); } catch(e){}
             msgDiv.innerText = "❌ වැරදියි, නැවත උත්සාහ කරන්න!";
-            msgDiv.style.color = "red";
+            msgDiv.style.color = "#e74c3c";
+            if (navigator.vibrate) navigator.vibrate(200);
         }
-    }
-
-    window.onload = () => {
-        const savedName = localStorage.getItem('wordKing_Name');
-        if(savedName) document.getElementById('playerNameInput').value = savedName;
     }
 </script>
 </body>
