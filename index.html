@@ -2,190 +2,85 @@
 <html lang="si">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Word King 👑 | Thilina Kumara</title>
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#f39c12">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WORD KING 👑</title>
     <style>
-        :root { --primary: #f39c12; --bg: #f8f9fa; --dark: #2c3e50; }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 15px; overflow: hidden; }
-        .card { background: white; padding: 25px; border-radius: 30px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; border-bottom: 8px solid var(--primary); }
-        .user-info { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 14px; font-weight: bold; background: #fff4e6; padding: 12px; border-radius: 15px; color: #d35400; }
-        .hint-box { background: #fdfaf6; padding: 20px; border-radius: 20px; text-align: left; margin: 15px 0; border: 1px solid #ffeaa7; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
-        .hint-si { font-size: 17px; color: var(--dark); font-weight: bold; line-height: 1.5; text-align: center; }
-        .grid { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
-        .cell { width: 45px; height: 50px; border: 2.5px solid #ddd; border-radius: 10px; text-align: center; font-size: 22px; font-weight: bold; text-transform: uppercase; outline: none; background: #fff; }
-        .cell:focus { border-color: var(--primary); background: #fffdf0; }
-        .cell:disabled { background: #f1f2f6; color: #95a5a6; }
-        .btn { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 18px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; box-shadow: 0 5px #d35400; }
-        .btn:active { transform: translateY(3px); box-shadow: 0 2px #d35400; }
-        .hidden { display: none; }
-        .watermark { margin-top: 20px; font-size: 10px; color: #bdc3c7; font-weight: bold; }
+        body { font-family: sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .grid { display: flex; justify-content: center; gap: 6px; margin: 20px 0; flex-wrap: wrap; }
+        .cell { width: 40px; height: 45px; border: 2px solid #ccc; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; text-transform: uppercase; }
+        .btn { background: #f39c12; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .skip-btn { background: #e74c3c; } /* මගහැර යාමට රතු බටන් එකක් */
+        #msg { margin-top: 15px; font-weight: bold; height: 20px; }
+        #scoreDisplay { font-size: 18px; font-weight: bold; color: #2c3e50; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
-<div id="loginScreen" class="card">
-    <div style="font-size: 50px;">👑</div>
-    <h1 style="color: var(--primary);">WORD KING</h1>
-    <p style="font-size: 13px; color: #7f8c8d;">By L Thilina Kumara</p>
-    <input type="text" id="playerNameInput" style="width:100%; padding:15px; margin:20px 0; border:2px solid #eee; border-radius:15px; text-align:center;" placeholder="ඔබේ නම...">
-    <button class="btn" onclick="startGame()">START GAME</button>
-</div>
-
-<div id="gameScreen" class="card hidden">
-    <div class="user-info">
-        <span>👤 <span id="displayName"></span></span>
-        <span>🏆 SCORE: <span id="displayScore">0</span></span>
-    </div>
-    <div class="hint-box">
-        <div class="hint-si" id="hintSi">පූරණය වෙමින්...</div>
-    </div>
-    <div class="grid" id="wordGrid"></div>
+<div class="card">
+    <h2 style="color: #f39c12;">WORD KING 👑</h2>
+    <div id="scoreDisplay">SCORE: 0</div>
+    <div id="hintSi" style="font-weight: bold; margin: 20px 0; min-height: 40px;">Loading...</div>
+    <div id="wordGrid" class="grid"></div>
     <button class="btn" onclick="checkAnswer()">CHECK ANSWER</button>
-    <div id="msg" style="margin-top:10px; font-weight:bold;"></div>
-    <div class="watermark">DESIGNED BY L THILINA KUMARA</div>
+    <button class="btn skip-btn" onclick="skipWord()">SKIP (-5 Points)</button>
+    <div id="msg"></div>
 </div>
 
 <script>
-    // මම මෙතනට ප්‍රශ්න ගොඩක් එකතු කළා
-    const masterBank = [
-        {w: "APPLE", h: "රතු හෝ කොළ පැහැති රසවත් පලතුරක්"},
-        {w: "WATER", h: "ජීවත් වීමට අත්‍යවශ්‍ය බොන දෙය"},
-        {w: "SCHOOL", h: "අකුරු ඉගෙන ගැනීමට යන ස්ථානය"},
-        {w: "MOTHER", h: "ලොවට බිහි කළ ආදරණීයම කාන්තාව"},
-        {w: "TREE", h: "අතු පතර විහිදුණු විශාල ශාකය"},
-        {w: "SMILE", h: "සතුටු වූ විට මුහුණේ ඇතිවන ඉරියව්ව"},
-        {w: "HOUSE", h: "අප ජීවත් වන නිවස"},
-        {w: "RIVER", h: "ගලා යන විශාල ජල කඳක්"},
-        {w: "BIRD", h: "අහසේ පියාසර කරන සත්වයෙක්"},
-        {w: "TRAIN", h: "පීලි මත දුවන දිගු වාහනය"},
-        {w: "FATHER", h: "පවුලක ප්‍රධානියා ලෙස සැලකෙන පියා"},
-        {w: "GARDEN", h: "මල් සහ ගස් වවා ඇති ලස්සන භූමිය"},
-        {w: "SUN", h: "දවල් කාලයේ ලොවට ආලෝකය දෙන තරුව"},
-        {w: "KING", h: "රටක් පාලනය කරන ප්‍රධානියා"},
-        {w: "MILK", h: "එළදෙනගෙන් ලබාගන්නා සුදු පානය"},
-        {w: "EARTH", h: "අප ජීවත් වන ග්‍රහලෝකය"},
-        {w: "FLOWER", h: "මිහිරි සුවඳක් දෙන ශාකයක කොටසක්"},
-        {w: "BOTTLE", h: "වතුර පුරවන භාජනය"},
-        {w: "CHAIR", h: "වාඩි වීමට ගන්නා ගෘහ භාණ්ඩයක්"},
-        {w: "BREAD", h: "පාන් පිටිවලින් හදන ආහාරයක්"},
-        {w: "CLOCK", h: "වෙලාව බැලීමට ගන්නා උපකරණය"},
-        {w: "SHIRT", h: "ඇඟට අඳින ඇඳුමක්"},
-        {w: "SPOON", h: "කෑම කන්න ගන්නා හැන්ද"},
-        {w: "ORANGE", h: "තැඹිලි පැහැති පලතුරක්"},
-        {w: "MOUNTAIN", h: "ඉතා උස විශාල කන්ද"},
-        {w: "PENCIL", h: "අකුරු ලිවීමට ගන්නා උපකරණය"},
-        {w: "DOCTOR", h: "ලෙඩුන්ට බෙහෙත් දෙන කෙනා"},
-        {w: "BICYCLE", h: "රෝද දෙකේ වාහනය"},
-        {w: "COFFEE", h: "උදෑසන බොන තිත්ත බීමක්"},
-        {w: "COMPUTER", h: "වැඩ පහසු කරන විද්‍යුත් යන්ත්‍රය"}
+    const localWords = [
+        {w: "WATER", h: "ජීවත් වීමට අවශ්‍ය බොන දෙය"}, {w: "APPLE", h: "රතු පාට රසවත් පලතුරක්"},
+        {w: "SCHOOL", h: "ඉගෙන ගන්නා ස්ථානය"}, {w: "MOTHER", h: "ආදරණීයම කාන්තාව"}
+        // තව වචන 100ක් දක්වා මෙතනට ඇතුළත් කරන්න
     ];
 
     let currentIdx = 0;
     let score = 0;
-    let currentWord = "";
 
-    window.onload = () => {
-        const savedName = localStorage.getItem('wk_name');
-        const savedIdx = localStorage.getItem('wk_idx');
-        const savedScore = localStorage.getItem('wk_score');
-
-        if(savedName && savedIdx !== null) {
-            currentIdx = parseInt(savedIdx);
-            score = parseInt(savedScore) || 0;
-            document.getElementById('playerNameInput').value = savedName;
-            startGame();
-        }
+    function updateUI() {
+        document.getElementById('scoreDisplay').innerText = "SCORE: " + score;
     }
 
-    function startGame() {
-        const name = document.getElementById('playerNameInput').value;
-        if(!name) return;
-        localStorage.setItem('wk_name', name);
-        document.getElementById('displayName').innerText = name;
-        document.getElementById('loginScreen').classList.add('hidden');
-        document.getElementById('gameScreen').classList.remove('hidden');
-        loadWord();
-    }
-
-    async function loadWord() {
-        const grid = document.getElementById('wordGrid');
+    function loadWord() {
+        let data = localWords[currentIdx % localWords.length];
+        document.getElementById('hintSi').innerText = data.h;
+        let word = data.w.toUpperCase();
+        let grid = document.getElementById('wordGrid');
         grid.innerHTML = "";
-        document.getElementById('msg').innerText = "";
-        
-        // ප්‍රශ්න බැංකුව ඉවර වුණොත් අන්තර්ජාලයෙන් වචන ගනී (API)
-        if (currentIdx < masterBank.length) {
-            let data = masterBank[currentIdx];
-            currentWord = data.w.toUpperCase();
-            document.getElementById('hintSi').innerText = data.h;
-            setupGrid(currentWord);
-        } else {
-            fetchNewWord();
-        }
-        
-        document.getElementById('displayScore').innerText = score;
-        localStorage.setItem('wk_idx', currentIdx);
-        localStorage.setItem('wk_score', score);
-    }
-
-    async function fetchNewWord() {
-        document.getElementById('hintSi').innerText = "අලුත් ප්‍රශ්නයක් සොයමින්...";
-        try {
-            const res = await fetch('https://random-word-api.herokuapp.com/word?length=5');
-            const data = await res.json();
-            const word = data[0].toUpperCase();
-            
-            // සිංහලට පරිවර්තනය (MyMemory API)
-            const trans = await fetch(`https://api.mymemory.translated.net/get?q=${word}&langpair=en|si`);
-            const transData = await trans.json();
-            
-            currentWord = word;
-            document.getElementById('hintSi').innerText = "මෙය හඳුනාගන්න: " + transData.responseData.translatedText;
-            setupGrid(word);
-        } catch(e) {
-            currentIdx = 0; // Error එකක් ආවොත් මුල සිට පටන් ගනී
-            loadWord();
-        }
-    }
-
-    function setupGrid(word) {
-        const grid = document.getElementById('wordGrid');
         for (let i = 0; i < word.length; i++) {
-            const input = document.createElement('input');
-            input.type = 'text';
-            input.className = 'cell';
-            input.maxLength = 1;
-            input.id = 'c' + i;
-            if (i === 0 || i === word.length - 1) { input.value = word[i]; input.disabled = true; }
-            input.oninput = function() {
-                if (this.value) {
-                    let next = document.getElementById('c' + (i + 1));
-                    if (next && next.disabled) next = document.getElementById('c' + (i + 2));
-                    if (next) next.focus();
-                }
-            };
+            let input = document.createElement('input');
+            input.className = 'cell'; input.maxLength = 1; input.id = 'c' + i;
             grid.appendChild(input);
         }
+        updateUI();
     }
 
     function checkAnswer() {
+        let word = localWords[currentIdx % localWords.length].w.toUpperCase();
         let guess = "";
-        for (let i = 0; i < currentWord.length; i++) guess += document.getElementById('c' + i).value.toUpperCase();
+        for (let i = 0; i < word.length; i++) guess += document.getElementById('c' + i).value.toUpperCase();
 
-        if (guess === currentWord) {
-            document.getElementById('msg').innerText = "✅ නිවැරදියි!";
-            document.getElementById('msg').style.color = "green";
+        if(guess === word) { 
             score += 10;
-            currentIdx++;
-            setTimeout(loadWord, 1000);
-        } else {
+            document.getElementById('msg').innerText = "✅ නිවැරදියි! (+10)";
+            document.getElementById('msg').style.color = "green";
+            currentIdx++; 
+            setTimeout(loadWord, 1000); 
+        } else { 
             document.getElementById('msg').innerText = "❌ වැරදියි!";
             document.getElementById('msg').style.color = "red";
         }
     }
+
+    function skipWord() {
+        score -= 5;
+        currentIdx++;
+        document.getElementById('msg').innerText = "⏭️ මගහැරියා (-5)";
+        document.getElementById('msg').style.color = "#e67e22";
+        setTimeout(loadWord, 1000);
+    }
+
+    loadWord();
 </script>
 </body>
 </html>
