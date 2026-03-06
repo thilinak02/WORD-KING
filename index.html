@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Word King 👑 | Thilina Kumara</title>
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#f39c12">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
@@ -17,24 +16,23 @@
         .hint-box { background: #fdfaf6; padding: 20px; border-radius: 20px; text-align: left; margin: 15px 0; border: 1px solid #ffeaa7; min-height: 100px; display: flex; flex-direction: column; justify-content: center; }
         .hint-si { font-size: 17px; color: var(--dark); font-weight: bold; line-height: 1.5; text-align: center; }
         .grid { display: flex; justify-content: center; gap: 8px; margin: 20px 0; flex-wrap: wrap; }
-        .cell { width: 48px; height: 55px; border: 2px solid #e0e0e0; border-radius: 12px; text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; outline: none; background: #fff; transition: 0.2s; }
-        .cell:focus { border-color: var(--primary); background: #fffdf0; transform: scale(1.05); }
-        .cell:disabled { background: #f1f2f6; color: #95a5a6; border-color: #eee; }
-        .btn { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 18px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; box-shadow: 0 5px #d35400; transition: 0.1s; }
+        .cell { width: 45px; height: 50px; border: 2.5px solid #ddd; border-radius: 10px; text-align: center; font-size: 22px; font-weight: bold; text-transform: uppercase; outline: none; background: #fff; }
+        .cell:focus { border-color: var(--primary); background: #fffdf0; }
+        .cell:disabled { background: #f1f2f6; color: #95a5a6; }
+        .btn { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 18px; font-size: 18px; font-weight: bold; width: 100%; cursor: pointer; box-shadow: 0 5px #d35400; }
         .btn:active { transform: translateY(3px); box-shadow: 0 2px #d35400; }
-        #msg { height: 25px; margin-top: 15px; font-weight: bold; font-size: 14px; }
-        .watermark { margin-top: 25px; font-size: 11px; color: #bdc3c7; font-weight: bold; letter-spacing: 1px; }
         .hidden { display: none; }
+        .watermark { margin-top: 20px; font-size: 10px; color: #bdc3c7; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <div id="loginScreen" class="card">
     <div style="font-size: 50px;">👑</div>
-    <h1 style="color: var(--primary); margin: 10px 0;">WORD KING</h1>
-    <p style="font-size: 14px; color: #7f8c8d; margin-bottom: 20px;">By Thilina Kumara</p>
-    <input type="text" id="playerNameInput" style="width:100%; padding:15px; margin-bottom:20px; border:2px solid #eee; border-radius:15px; text-align:center; font-size:16px;" placeholder="ඔබේ නම ඇතුළත් කරන්න">
-    <button class="btn" onclick="startGame()">ක්‍රීඩාව අරඹන්න</button>
+    <h1 style="color: var(--primary);">WORD KING</h1>
+    <p style="font-size: 13px; color: #7f8c8d;">By L Thilina Kumara</p>
+    <input type="text" id="playerNameInput" style="width:100%; padding:15px; margin:20px 0; border:2px solid #eee; border-radius:15px; text-align:center;" placeholder="ඔබේ නම...">
+    <button class="btn" onclick="startGame()">START GAME</button>
 </div>
 
 <div id="gameScreen" class="card hidden">
@@ -43,24 +41,22 @@
         <span>🏆 SCORE: <span id="displayScore">0</span></span>
     </div>
     <div class="hint-box">
-        <div class="hint-si" id="hintSi">සූදානම් වන්න...</div>
+        <div class="hint-si" id="hintSi">පූරණය වෙමින්...</div>
     </div>
     <div class="grid" id="wordGrid"></div>
-    <button class="btn" onclick="checkAnswer()">පරීක්ෂා කරන්න</button>
-    <div id="msg"></div>
+    <button class="btn" onclick="checkAnswer()">CHECK ANSWER</button>
+    <div id="msg" style="margin-top:10px; font-weight:bold;"></div>
     <div class="watermark">DESIGNED BY L THILINA KUMARA</div>
 </div>
 
-<audio id="winSnd" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
-<audio id="failSnd" src="https://www.soundjay.com/buttons/sounds/button-10.mp3"></audio>
-
 <script>
+    // මම මෙතනට ප්‍රශ්න ගොඩක් එකතු කළා
     const masterBank = [
         {w: "APPLE", h: "රතු හෝ කොළ පැහැති රසවත් පලතුරක්"},
         {w: "WATER", h: "ජීවත් වීමට අත්‍යවශ්‍ය බොන දෙය"},
         {w: "SCHOOL", h: "අකුරු ඉගෙන ගැනීමට යන ස්ථානය"},
         {w: "MOTHER", h: "ලොවට බිහි කළ ආදරණීයම කාන්තාව"},
-        {w: "TREE", h: "සාකයක් හදුන් වන නම"},
+        {w: "TREE", h: "අතු පතර විහිදුණු විශාල ශාකය"},
         {w: "SMILE", h: "සතුටු වූ විට මුහුණේ ඇතිවන ඉරියව්ව"},
         {w: "HOUSE", h: "අප ජීවත් වන නිවස"},
         {w: "RIVER", h: "ගලා යන විශාල ජල කඳක්"},
@@ -72,14 +68,26 @@
         {w: "KING", h: "රටක් පාලනය කරන ප්‍රධානියා"},
         {w: "MILK", h: "එළදෙනගෙන් ලබාගන්නා සුදු පානය"},
         {w: "EARTH", h: "අප ජීවත් වන ග්‍රහලෝකය"},
-        {w: "FLOWER", h: "මිහිරි සුවඳක් දෙන ශාකයක කොටසක්"}
+        {w: "FLOWER", h: "මිහිරි සුවඳක් දෙන ශාකයක කොටසක්"},
+        {w: "BOTTLE", h: "වතුර පුරවන භාජනය"},
+        {w: "CHAIR", h: "වාඩි වීමට ගන්නා ගෘහ භාණ්ඩයක්"},
+        {w: "BREAD", h: "පාන් පිටිවලින් හදන ආහාරයක්"},
+        {w: "CLOCK", h: "වෙලාව බැලීමට ගන්නා උපකරණය"},
+        {w: "SHIRT", h: "ඇඟට අඳින ඇඳුමක්"},
+        {w: "SPOON", h: "කෑම කන්න ගන්නා හැන්ද"},
+        {w: "ORANGE", h: "තැඹිලි පැහැති පලතුරක්"},
+        {w: "MOUNTAIN", h: "ඉතා උස විශාල කන්ද"},
+        {w: "PENCIL", h: "අකුරු ලිවීමට ගන්නා උපකරණය"},
+        {w: "DOCTOR", h: "ලෙඩුන්ට බෙහෙත් දෙන කෙනා"},
+        {w: "BICYCLE", h: "රෝද දෙකේ වාහනය"},
+        {w: "COFFEE", h: "උදෑසන බොන තිත්ත බීමක්"},
+        {w: "COMPUTER", h: "වැඩ පහසු කරන විද්‍යුත් යන්ත්‍රය"}
     ];
 
     let currentIdx = 0;
     let score = 0;
     let currentWord = "";
 
-    // ඇප් එක Load වන විට කලින් තිබූ තොරතුරු ලබා ගැනීම
     window.onload = () => {
         const savedName = localStorage.getItem('wk_name');
         const savedIdx = localStorage.getItem('wk_idx');
@@ -89,14 +97,13 @@
             currentIdx = parseInt(savedIdx);
             score = parseInt(savedScore) || 0;
             document.getElementById('playerNameInput').value = savedName;
-            startGame(); // කෙලින්ම Game එකට යන්න
+            startGame();
         }
     }
 
     function startGame() {
         const name = document.getElementById('playerNameInput').value;
-        if(!name) return alert("නම ඇතුළත් කරන්න!");
-        
+        if(!name) return;
         localStorage.setItem('wk_name', name);
         document.getElementById('displayName').innerText = name;
         document.getElementById('loginScreen').classList.add('hidden');
@@ -104,26 +111,55 @@
         loadWord();
     }
 
-    function loadWord() {
+    async function loadWord() {
+        const grid = document.getElementById('wordGrid');
+        grid.innerHTML = "";
         document.getElementById('msg').innerText = "";
-        document.getElementById('wordGrid').innerHTML = "";
         
-        let data = masterBank[currentIdx % masterBank.length];
-        currentWord = data.w.toUpperCase();
-        document.getElementById('hintSi').innerText = data.h;
+        // ප්‍රශ්න බැංකුව ඉවර වුණොත් අන්තර්ජාලයෙන් වචන ගනී (API)
+        if (currentIdx < masterBank.length) {
+            let data = masterBank[currentIdx];
+            currentWord = data.w.toUpperCase();
+            document.getElementById('hintSi').innerText = data.h;
+            setupGrid(currentWord);
+        } else {
+            fetchNewWord();
+        }
+        
         document.getElementById('displayScore').innerText = score;
-
-        // Level එක සහ Score එක ස්ථිරවම Save කිරීම
         localStorage.setItem('wk_idx', currentIdx);
         localStorage.setItem('wk_score', score);
+    }
 
-        for (let i = 0; i < currentWord.length; i++) {
+    async function fetchNewWord() {
+        document.getElementById('hintSi').innerText = "අලුත් ප්‍රශ්නයක් සොයමින්...";
+        try {
+            const res = await fetch('https://random-word-api.herokuapp.com/word?length=5');
+            const data = await res.json();
+            const word = data[0].toUpperCase();
+            
+            // සිංහලට පරිවර්තනය (MyMemory API)
+            const trans = await fetch(`https://api.mymemory.translated.net/get?q=${word}&langpair=en|si`);
+            const transData = await trans.json();
+            
+            currentWord = word;
+            document.getElementById('hintSi').innerText = "මෙය හඳුනාගන්න: " + transData.responseData.translatedText;
+            setupGrid(word);
+        } catch(e) {
+            currentIdx = 0; // Error එකක් ආවොත් මුල සිට පටන් ගනී
+            loadWord();
+        }
+    }
+
+    function setupGrid(word) {
+        const grid = document.getElementById('wordGrid');
+        for (let i = 0; i < word.length; i++) {
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'cell';
             input.maxLength = 1;
             input.id = 'c' + i;
-            if (i === 0 || i === currentWord.length - 1) { input.value = currentWord[i]; input.disabled = true; }
+            if (i === 0 || i === word.length - 1) { input.value = word[i]; input.disabled = true; }
             input.oninput = function() {
                 if (this.value) {
                     let next = document.getElementById('c' + (i + 1));
@@ -131,7 +167,7 @@
                     if (next) next.focus();
                 }
             };
-            document.getElementById('wordGrid').appendChild(input);
+            grid.appendChild(input);
         }
     }
 
@@ -139,19 +175,15 @@
         let guess = "";
         for (let i = 0; i < currentWord.length; i++) guess += document.getElementById('c' + i).value.toUpperCase();
 
-        const msgDiv = document.getElementById('msg');
         if (guess === currentWord) {
-            try { document.getElementById('winSnd').play(); } catch(e){}
-            msgDiv.innerText = "✅ නිවැරදියි!";
-            msgDiv.style.color = "#27ae60";
+            document.getElementById('msg').innerText = "✅ නිවැරදියි!";
+            document.getElementById('msg').style.color = "green";
             score += 10;
             currentIdx++;
-            setTimeout(loadWord, 1500);
+            setTimeout(loadWord, 1000);
         } else {
-            try { document.getElementById('failSnd').play(); } catch(e){}
-            msgDiv.innerText = "❌ වැරදියි, නැවත උත්සාහ කරන්න!";
-            msgDiv.style.color = "#e74c3c";
-            if (navigator.vibrate) navigator.vibrate(200);
+            document.getElementById('msg').innerText = "❌ වැරදියි!";
+            document.getElementById('msg').style.color = "red";
         }
     }
 </script>
