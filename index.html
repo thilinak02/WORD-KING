@@ -5,22 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WORD KING 👑</title>
     <style>
-        body { font-family: sans-serif; background: #f8f9fa; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .grid { display: flex; justify-content: center; gap: 6px; margin: 20px 0; flex-wrap: wrap; }
-        .cell { width: 40px; height: 45px; border: 2px solid #ccc; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; text-transform: uppercase; }
-        .cell:disabled { background: #eee; }
-        .btn { background: #f39c12; color: white; border: none; padding: 15px; width: 100%; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .skip-btn { background: #e74c3c; }
-        #msg { margin-top: 15px; font-weight: bold; height: 25px; }
+        body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.2); width: 90%; max-width: 400px; text-align: center; border-bottom: 10px solid #f39c12; }
+        .score-box { background: #fff4e6; padding: 10px; border-radius: 15px; color: #d35400; font-weight: bold; margin-bottom: 20px; font-size: 1.2em; }
+        .grid { display: flex; justify-content: center; gap: 8px; margin: 25px 0; flex-wrap: wrap; }
+        .cell { width: 45px; height: 50px; border: 2px solid #ddd; border-radius: 12px; text-align: center; font-size: 24px; font-weight: bold; text-transform: uppercase; transition: 0.3s; }
+        .cell:focus { border-color: #f39c12; outline: none; background: #fffdf0; }
+        .cell:disabled { background: #eee; color: #888; }
+        .btn { background: #f39c12; color: white; border: none; padding: 18px; width: 100%; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 10px; box-shadow: 0 5px #d35400; }
+        .btn:active { transform: translateY(3px); box-shadow: 0 2px #d35400; }
+        .skip-btn { background: #e74c3c; box-shadow: 0 5px #c0392b; }
+        #msg { margin-top: 20px; font-weight: bold; height: 30px; font-size: 18px; }
     </style>
 </head>
 <body>
 
 <div class="card">
-    <h2 style="color: #f39c12;">WORD KING 👑</h2>
-    <div id="scoreDisplay" style="font-weight:bold;">SCORE: 0</div>
-    <div id="hintSi" style="font-weight: bold; margin: 20px 0; min-height: 40px;"></div>
+    <h2 style="color: #f39c12; margin-top:0;">WORD KING 👑</h2>
+    <div id="scoreDisplay" class="score-box">SCORE: 0</div>
+    <div id="hintSi" style="font-size: 18px; color: #34495e; font-weight: bold; min-height: 60px;"></div>
     <div id="wordGrid" class="grid"></div>
     <button class="btn" onclick="checkAnswer()">CHECK ANSWER</button>
     <button class="btn skip-btn" onclick="skipWord()">SKIP (-5 Points)</button>
@@ -56,7 +59,9 @@
         {w: "WET", h: "තෙත"}, {w: "SHARP", h: "තියුණු"}, {w: "LEMON", h: "දෙහි"}, {w: "GRAPE", h: "මිදි"}
     ];
 
-    let currentIdx = 0; let score = 0;
+    // LocalStorage එකෙන් දත්ත ගන්නවා
+    let currentIdx = parseInt(localStorage.getItem('wk_idx')) || 0;
+    let score = parseInt(localStorage.getItem('wk_score')) || 0;
 
     function loadWord() {
         let data = localWords[currentIdx % localWords.length];
@@ -64,25 +69,44 @@
         let word = data.w.toUpperCase();
         let grid = document.getElementById('wordGrid');
         grid.innerHTML = "";
+        
         for (let i = 0; i < word.length; i++) {
             let input = document.createElement('input');
             input.className = 'cell'; input.maxLength = 1; input.id = 'c' + i;
             if(i === 0 || i === word.length - 1) { input.value = word[i]; input.disabled = true; }
-            else { input.oninput = function() { if(this.value.length === 1) { let next = document.getElementById('c' + (i + 1)); if(next) next.focus(); } }; }
+            else { 
+                input.oninput = function() { 
+                    if(this.value.length === 1) { 
+                        let next = document.getElementById('c' + (i + 1)); 
+                        if(next) next.focus(); 
+                    } 
+                }; 
+            }
             grid.appendChild(input);
         }
         document.getElementById('scoreDisplay').innerText = "SCORE: " + score;
+        localStorage.setItem('wk_idx', currentIdx);
+        localStorage.setItem('wk_score', score);
     }
 
     function checkAnswer() {
         let word = localWords[currentIdx % localWords.length].w.toUpperCase();
         let guess = "";
         for (let i = 0; i < word.length; i++) guess += document.getElementById('c' + i).value.toUpperCase();
-        if(guess === word) { score += 10; document.getElementById('msg').innerText = "✅ නිවැරදියි! (+10)"; document.getElementById('msg').style.color = "green"; currentIdx++; setTimeout(loadWord, 1000); }
-        else { document.getElementById('msg').innerText = "❌ වැරදියි!"; document.getElementById('msg').style.color = "red"; }
+        
+        if(guess === word) { 
+            score += 10; currentIdx++; loadWord();
+            document.getElementById('msg').innerText = "✅ නිවැරදියි!"; document.getElementById('msg').style.color = "green";
+        } else { 
+            document.getElementById('msg').innerText = "❌ වැරදියි!"; document.getElementById('msg').style.color = "red";
+        }
     }
 
-    function skipWord() { score -= 5; currentIdx++; document.getElementById('msg').innerText = "⏭️ මගහැරියා (-5)"; document.getElementById('msg').style.color = "#e67e22"; setTimeout(loadWord, 1000); }
+    function skipWord() {
+        score -= 5; currentIdx++; loadWord();
+        document.getElementById('msg').innerText = "⏭️ මගහැරියා!"; document.getElementById('msg').style.color = "#e67e22";
+    }
+
     loadWord();
 </script>
 </body>
